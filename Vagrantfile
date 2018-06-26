@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
     vb.customize [
       "modifyvm", :id,
       "--paravirtprovider", "none",
-      "--cpus", "4"
+      "--cpus", "2"
     ]
   end
 
