@@ -20,15 +20,15 @@ gcc -pthread -o weird weird.c
 Run the test on the metal:
 
 ```
-time ./weird 1     # UP
-time ./weird 2     # SMP
+time ./weird 1000000 up
+time ./weird 1000000 smp
 ```
 
 Run the test in the VM:
 
 ```
-time vagrant ssh -c "/vagrant/weird 1"
-time vagrant ssh -c "/vagrant/weird 2"
+time vagrant ssh -c "/vagrant/weird 1000000 up"
+time vagrant ssh -c "/vagrant/weird 1000000 smp"
 ```
 
 You can assess the distribution of execution time of `vagrant ssh` by running `vagrant ssh ""` and calculating mean/stddev
