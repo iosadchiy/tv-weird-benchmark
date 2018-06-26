@@ -1,0 +1,72 @@
+7c7
+< kernel.sched_domain.cpu0.domain0.flags = 4655
+---
+> kernel.sched_domain.cpu0.domain0.flags = 4143
+9,10c9,10
+< kernel.sched_domain.cpu0.domain0.idle_idx = 0
+< kernel.sched_domain.cpu0.domain0.imbalance_pct = 117
+---
+> kernel.sched_domain.cpu0.domain0.idle_idx = 1
+> kernel.sched_domain.cpu0.domain0.imbalance_pct = 125
+12c12
+< kernel.sched_domain.cpu0.domain0.max_newidle_lb_cost = 20142
+---
+> kernel.sched_domain.cpu0.domain0.max_newidle_lb_cost = 22379
+14c14
+< kernel.sched_domain.cpu0.domain0.name = MC
+---
+> kernel.sched_domain.cpu0.domain0.name = DIE
+20c20
+< kernel.sched_domain.cpu1.domain0.flags = 4655
+---
+> kernel.sched_domain.cpu1.domain0.flags = 4143
+22,23c22,23
+< kernel.sched_domain.cpu1.domain0.idle_idx = 0
+< kernel.sched_domain.cpu1.domain0.imbalance_pct = 117
+---
+> kernel.sched_domain.cpu1.domain0.idle_idx = 1
+> kernel.sched_domain.cpu1.domain0.imbalance_pct = 125
+25c25
+< kernel.sched_domain.cpu1.domain0.max_newidle_lb_cost = 25686
+---
+> kernel.sched_domain.cpu1.domain0.max_newidle_lb_cost = 19600
+27c27
+< kernel.sched_domain.cpu1.domain0.name = MC
+---
+> kernel.sched_domain.cpu1.domain0.name = DIE
+33c33
+< kernel.sched_domain.cpu2.domain0.flags = 4655
+---
+> kernel.sched_domain.cpu2.domain0.flags = 4143
+35,36c35,36
+< kernel.sched_domain.cpu2.domain0.idle_idx = 0
+< kernel.sched_domain.cpu2.domain0.imbalance_pct = 117
+---
+> kernel.sched_domain.cpu2.domain0.idle_idx = 1
+> kernel.sched_domain.cpu2.domain0.imbalance_pct = 125
+38c38
+< kernel.sched_domain.cpu2.domain0.max_newidle_lb_cost = 24217
+---
+> kernel.sched_domain.cpu2.domain0.max_newidle_lb_cost = 22857
+40c40
+< kernel.sched_domain.cpu2.domain0.name = MC
+---
+> kernel.sched_domain.cpu2.domain0.name = DIE
+46c46
+< kernel.sched_domain.cpu3.domain0.flags = 4655
+---
+> kernel.sched_domain.cpu3.domain0.flags = 4143
+48,49c48,49
+< kernel.sched_domain.cpu3.domain0.idle_idx = 0
+< kernel.sched_domain.cpu3.domain0.imbalance_pct = 117
+---
+> kernel.sched_domain.cpu3.domain0.idle_idx = 1
+> kernel.sched_domain.cpu3.domain0.imbalance_pct = 125
+51c51
+< kernel.sched_domain.cpu3.domain0.max_newidle_lb_cost = 24235
+---
+> kernel.sched_domain.cpu3.domain0.max_newidle_lb_cost = 13291
+53c53
+< kernel.sched_domain.cpu3.domain0.name = MC
+---
+> kernel.sched_domain.cpu3.domain0.name = DIE
