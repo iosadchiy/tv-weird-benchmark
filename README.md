@@ -1,3 +1,5 @@
+Depends on vagrant and virtualbox
+
 Run the VM:
 
 ```
@@ -32,3 +34,9 @@ time vagrant ssh -c "/vagrant/weird 1000000 smp"
 ```
 
 You can assess the distribution of execution time of `vagrant ssh` by running `vagrant ssh ""` and calculating mean/stddev
+
+Or use the harness (requires running VM):
+
+```
+bash bench.sh bm up && bash bench.sh vm up
+```
