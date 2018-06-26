@@ -1,12 +1,19 @@
 	.file	"weird.c"
 	.text
-	.globl	NLOCKS
-	.section	.rodata
+	.globl	n_cycles
+	.data
 	.align 4
-	.type	NLOCKS, @object
-	.size	NLOCKS, 4
-NLOCKS:
-	.long	100000000
+	.type	n_cycles, @object
+	.size	n_cycles, 4
+n_cycles:
+	.long	10000000
+	.globl	mode
+	.bss
+	.align 4
+	.type	mode, @object
+	.size	mode, 4
+mode:
+	.zero	4
 	.local	global_var
 	.comm	global_var,4,4
 	.comm	lock,40,32
@@ -80,9 +87,10 @@ doSmt:
 	call	pthread_mutex_unlock@PLT
 	addl	$1, -168(%rbp)
 .L4:
-	movl	$100000000, %eax
-	cmpl	%eax, -168(%rbp)
-	jl	.L5
+	movl	-168(%rbp), %edx
+	movl	n_cycles(%rip), %eax
+	cmpl	%eax, %edx
+	jb	.L5
 	movl	$0, %eax
 	movq	-8(%rbp), %rdi
 	xorq	%fs:40, %rdi
@@ -96,11 +104,14 @@ doSmt:
 .LFE5:
 	.size	doSmt, .-doSmt
 	.section	.rodata
+	.align 8
 .LC0:
-	.string	"Usage: ./weird 1 OR ./weird 2"
+	.string	"Usage: ./weird <n_cycles> <up|smp>"
 .LC1:
-	.string	"\n mutex init failed"
+	.string	"up"
 .LC2:
+	.string	"\n mutex init failed"
+.LC3:
 	.string	"\ncan't create thread"
 	.text
 	.globl	main
@@ -113,37 +124,47 @@ main:
 	.cfi_offset 6, -16
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register 6
-	subq	$48, %rsp
-	movl	%edi, -36(%rbp)
-	movq	%rsi, -48(%rbp)
+	subq	$32, %rsp
+	movl	%edi, -20(%rbp)
+	movq	%rsi, -32(%rbp)
 	movq	%fs:40, %rax
 	movq	%rax, -8(%rbp)
 	xorl	%eax, %eax
-	cmpl	$2, -36(%rbp)
+	cmpl	$3, -20(%rbp)
 	je	.L9
 	leaq	.LC0(%rip), %rdi
 	call	puts@PLT
 	movl	$1, %eax
 	jmp	.L14
 .L9:
-	movq	-48(%rbp), %rax
+	movq	-32(%rbp), %rax
 	addq	$8, %rax
 	movq	(%rax), %rax
 	movq	%rax, %rdi
 	call	atoi@PLT
-	movl	%eax, -12(%rbp)
+	movl	%eax, n_cycles(%rip)
+	movq	-32(%rbp), %rax
+	addq	$16, %rax
+	movq	(%rax), %rax
+	leaq	.LC1(%rip), %rsi
+	movq	%rax, %rdi
+	call	strcmp@PLT
+	testl	%eax, %eax
+	setne	%al
+	movzbl	%al, %eax
+	movl	%eax, mode(%rip)
 	movl	$0, %esi
 	leaq	lock(%rip), %rdi
 	call	pthread_mutex_init@PLT
 	testl	%eax, %eax
 	je	.L11
-	leaq	.LC1(%rip), %rdi
+	leaq	.LC2(%rip), %rdi
 	call	puts@PLT
 	movl	$1, %eax
 	jmp	.L14
 .L11:
-	movl	$0, -20(%rbp)
-	leaq	-20(%rbp), %rax
+	movl	$0, -16(%rbp)
+	leaq	-16(%rbp), %rax
 	movq	%rax, %rcx
 	leaq	doSmt(%rip), %rdx
 	movl	$0, %esi
@@ -151,15 +172,16 @@ main:
 	call	pthread_create@PLT
 	testl	%eax, %eax
 	je	.L12
-	leaq	.LC2(%rip), %rdi
+	leaq	.LC3(%rip), %rdi
 	movl	$0, %eax
 	call	printf@PLT
 .L12:
-	cmpl	$1, -12(%rbp)
+	movl	mode(%rip), %eax
+	cmpl	$1, %eax
 	setne	%al
 	movzbl	%al, %eax
-	movl	%eax, -16(%rbp)
-	leaq	-16(%rbp), %rax
+	movl	%eax, -12(%rbp)
+	leaq	-12(%rbp), %rax
 	movq	%rax, %rcx
 	leaq	doSmt(%rip), %rdx
 	movl	$0, %esi
@@ -167,7 +189,7 @@ main:
 	call	pthread_create@PLT
 	testl	%eax, %eax
 	je	.L13
-	leaq	.LC2(%rip), %rdi
+	leaq	.LC3(%rip), %rdi
 	movl	$0, %eax
 	call	printf@PLT
 .L13:
