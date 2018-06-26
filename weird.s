@@ -78,10 +78,8 @@ doSmt:
 .L5:
 	leaq	lock(%rip), %rdi
 	call	pthread_mutex_lock@PLT
-	movl	global_var(%rip), %edx
-	movl	%edx, %eax
-	addl	%eax, %eax
-	addl	%edx, %eax
+	movl	global_var(%rip), %eax
+	addl	$1, %eax
 	movl	%eax, global_var(%rip)
 	leaq	lock(%rip), %rdi
 	call	pthread_mutex_unlock@PLT
@@ -135,7 +133,7 @@ main:
 	leaq	.LC0(%rip), %rdi
 	call	puts@PLT
 	movl	$1, %eax
-	jmp	.L14
+	jmp	.L16
 .L9:
 	movq	-32(%rbp), %rax
 	addq	$8, %rax
@@ -150,19 +148,23 @@ main:
 	movq	%rax, %rdi
 	call	strcmp@PLT
 	testl	%eax, %eax
-	setne	%al
-	movzbl	%al, %eax
+	jne	.L11
+	movl	$1, %eax
+	jmp	.L12
+.L11:
+	movl	$2, %eax
+.L12:
 	movl	%eax, mode(%rip)
 	movl	$0, %esi
 	leaq	lock(%rip), %rdi
 	call	pthread_mutex_init@PLT
 	testl	%eax, %eax
-	je	.L11
+	je	.L13
 	leaq	.LC2(%rip), %rdi
 	call	puts@PLT
 	movl	$1, %eax
-	jmp	.L14
-.L11:
+	jmp	.L16
+.L13:
 	movl	$0, -16(%rbp)
 	leaq	-16(%rbp), %rax
 	movq	%rax, %rcx
@@ -171,11 +173,11 @@ main:
 	leaq	tid(%rip), %rdi
 	call	pthread_create@PLT
 	testl	%eax, %eax
-	je	.L12
+	je	.L14
 	leaq	.LC3(%rip), %rdi
 	movl	$0, %eax
 	call	printf@PLT
-.L12:
+.L14:
 	movl	mode(%rip), %eax
 	cmpl	$1, %eax
 	setne	%al
@@ -188,11 +190,11 @@ main:
 	leaq	8+tid(%rip), %rdi
 	call	pthread_create@PLT
 	testl	%eax, %eax
-	je	.L13
+	je	.L15
 	leaq	.LC3(%rip), %rdi
 	movl	$0, %eax
 	call	printf@PLT
-.L13:
+.L15:
 	movq	tid(%rip), %rax
 	movl	$0, %esi
 	movq	%rax, %rdi
@@ -204,12 +206,12 @@ main:
 	leaq	lock(%rip), %rdi
 	call	pthread_mutex_destroy@PLT
 	movl	$0, %eax
-.L14:
+.L16:
 	movq	-8(%rbp), %rdx
 	xorq	%fs:40, %rdx
-	je	.L15
+	je	.L17
 	call	__stack_chk_fail@PLT
-.L15:
+.L17:
 	leave
 	.cfi_def_cfa 7, 8
 	ret

@@ -23,7 +23,7 @@ void* doSmt(void *arg) {
 
     for (int i = 0; i < n_cycles; i++) {
         pthread_mutex_lock(&lock);
-        global_var += global_var * 2;
+        global_var++;
         pthread_mutex_unlock(&lock);
     }
     return NULL;
