@@ -13,7 +13,6 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "generic/arch"
-  config.vm.synced_folder ".", "/vagrant"
 
   config.vm.provider "virtualbox" do |vb|
     vb.customize [
@@ -23,6 +22,13 @@ Vagrant.configure("2") do |config|
     ]
   end
 
+  # config.vm.provision "shell", inline: "pacman --noconfirm -S virtualbox-guest-dkms && pacman --noconfirm -S virtualbox-guest-utils-nox && modprobe -a vboxguest vboxsf vboxvideo"
+  config.vm.provision "shell", inline: "pacman --noconfirm -S linux-headers"
+  config.vm.provision "shell", inline: "pacman --noconfirm -S virtualbox-guest-dkms"
+  config.vm.provision "shell", inline: "pacman --noconfirm -S virtualbox-guest-utils-nox"
+  config.vm.provision "shell", inline: "modprobe -a vboxguest vboxsf"
+
+  config.vm.synced_folder ".", "/vagrant"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
